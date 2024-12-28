@@ -1,6 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, Trash2 } from 'lucide-react';
+import Image from 'next/image';
+
 
 interface MediaCardProps {
   title: string;
@@ -39,12 +41,13 @@ export default function MediaCard({
 
       {/* Image Container */}
       <div className="relative aspect-[2/3] w-full">
-        <img 
-          src={coverImage || '/placeholder.jpg'} 
-          alt={title}
-          className="object-cover w-full h-full"
-        />
-      </div>
+  <Image
+    src={coverImage || '/placeholder.jpg'}
+    alt={title}
+    fill
+    className="object-cover"
+  />
+</div>
 
       {/* Content Container */}
       <div className="p-4 flex flex-col flex-grow">
