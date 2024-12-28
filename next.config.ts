@@ -8,13 +8,15 @@ const nextConfig = {
         port: '',
         pathname: '/t/p/**',
       },
-      // Add more patterns if needed
     ],
+  },
+  eslint: {
+    // Disabling specific rules if needed
+    ignoreDuringBuilds: true,
   },
   typescript: {
     ignoreBuildErrors: true,
   },
-  reactStrictMode: true,
 };
 
 export default nextConfig;

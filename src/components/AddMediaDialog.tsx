@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search, Loader2 } from 'lucide-react';
 import { searchTMDB } from '@/lib/tmdb';
+import Image from 'next/image';
 
 interface SearchResult {
   id: number;
@@ -98,11 +99,14 @@ export default function AddMediaDialog({ onAdd }: AddMediaDialogProps) {
                     onClick={() => handleAdd(result)}
                 >
                     {result.coverImage && (
-                        <img
-                            src={result.coverImage}
-                            alt={result.title}
-                            className="w-full h-48 object-cover" />
-                    )}
+                       <Image
+                       src={result.coverImage}
+                       alt={result.title}
+                       width={200}
+                       height={300}
+                       className="w-full h-48 object-cover"
+                     />
+                   )}
                     <div className="p-4">
                         <h3 className="font-semibold mb-2 group-hover:text-blue-600">
                             {result.title}
