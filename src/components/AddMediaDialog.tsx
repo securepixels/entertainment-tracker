@@ -8,7 +8,7 @@ import { searchTMDB } from '@/lib/tmdb';
 interface SearchResult {
   id: number;
   title: string;
-  type: string;
+  type: "movie" | "tv" | "book";
   overview: string;
   coverImage: string | null;
 }
