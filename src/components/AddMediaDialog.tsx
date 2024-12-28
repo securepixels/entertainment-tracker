@@ -16,8 +16,8 @@ interface SearchResult {
 interface AddMediaDialogProps {
   onAdd: (item: {
     title: string;
-    type: string;
-    status: string;
+    type: "movie" | "tv" | "book";
+    status: "want_to_watch" | "watching" | "completed"; 
     description?: string;
     coverImage?: string;
   }) => void;

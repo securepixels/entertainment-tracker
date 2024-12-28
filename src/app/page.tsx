@@ -31,13 +31,24 @@ export default function Home() {
     localStorage.setItem('mediaItems', JSON.stringify(items));
   }, [items]);
 
-  const handleAddItem = (newItem: Omit<MediaItem, 'id' | 'rating'>) => {
-    setItems(prev => [...prev, { 
-      ...newItem, 
-      id: Date.now().toString(), 
-      rating: 0,
-      coverImage: newItem.coverImage || '/placeholder.jpg'
-    }]);
+  const handleAddItem = (item: {
+    title: string;
+    type: 'movie' | 'tv' | 'book';
+    status: 'want_to_watch' | 'watching' | 'completed';
+    description?: string;
+    coverImage?: string;
+  }) => {
+    setItems(prev => {
+      return [
+        ...prev,
+        {
+          ...item,
+          id: Date.now().toString(),
+          rating: 0,
+          coverImage: item.coverImage || '/placeholder.jpg'
+        } as MediaItem
+      ];
+    });
   };
 
   const handleStatusChange = (id: string, status: string) => {
@@ -71,6 +82,7 @@ export default function Home() {
           <h1 className="text-3xl font-bold text-white-900">
             Entertainment Tracker
           </h1>
+          
           <AddMediaDialog onAdd={handleAddItem} />
         </div>
 
