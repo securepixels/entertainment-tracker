@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Entertainment Tracker
 
+An entertainment app where I can keep track of all movies or tv shows
+
 First, run the development server:
 
 ```bash
