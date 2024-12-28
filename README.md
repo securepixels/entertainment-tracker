@@ -1,24 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Entertainment Tracker
 
-## Entertainment Tracker
+A modern web application for tracking your movies and TV shows with a clean, responsive interface.
 
-An entertainment app where I can keep track of all movies or tv shows
+## 🚀 Tech Stack
 
-First, run the development server:
+- **Framework**: [Next.js 14](https://nextjs.org/) with App Router
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **UI Components**: 
+  - [shadcn/ui](https://ui.shadcn.com/)
+  - [Lucide Icons](https://lucide.dev/)
+- **Data Management**: 
+  - Local Storage
+  - [TMDB API](https://www.themoviedb.org/documentation/api) for movie/TV show data
+- **Type Safety**: TypeScript
+- **Deployment**: Vercel
 
+## ✨ Features
+
+- 🎯 Track movies and TV shows in one place
+- 🔍 Search TMDB database for content
+- ⭐ Rate and review your watched content
+- 📱 Fully responsive design
+- 🌓 Status tracking (Want to Watch, Watching, Completed)
+- 🗑️ Easy content management (add/delete items)
+
+## 🛠️ Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/entertainment-tracker.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+cd entertainment-tracker
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Create a `.env.local` file in the root directory:
+```env
+NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Run the development server:
+```bash
+npm run dev
+```
+
+## 📝 Environment Variables
+
+Make sure to set up the following environment variables:
+
+- `NEXT_PUBLIC_TMDB_API_KEY`: Your TMDB API key
+
+## 🔧 Development
+
+```bash
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Run linting
+npm run lint
+```
+
+
+## 🧪 Future Enhancements
+
+- [ ] User authentication
+- [ ] Advanced filtering and sorting
+- [ ] Personal notes and reviews
+- [ ] Watch history tracking
 
