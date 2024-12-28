@@ -1,101 +1,116 @@
-import Image from "next/image";
+'use client';
+import { useState, useEffect } from 'react';
+import { Input } from "@/components/ui/input";
+import { Search } from 'lucide-react';
+import MediaCard from '@/components/MediaCard';
+import AddMediaDialog from '@/components/AddMediaDialog';
+
+interface MediaItem {
+  id: string;
+  title: string;
+  type: 'movie' | 'tv' | 'book';
+  status: 'want_to_watch' | 'watching' | 'completed';
+  rating?: number;
+  coverImage?: string;
+  description?: string;
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [items, setItems] = useState<MediaItem[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    const savedItems = localStorage.getItem('mediaItems');
+    if (savedItems) {
+      setItems(JSON.parse(savedItems));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('mediaItems', JSON.stringify(items));
+  }, [items]);
+
+  const handleAddItem = (newItem: Omit<MediaItem, 'id' | 'rating'>) => {
+    setItems(prev => [...prev, { 
+      ...newItem, 
+      id: Date.now().toString(), 
+      rating: 0,
+      coverImage: newItem.coverImage || '/placeholder.jpg'
+    }]);
+  };
+
+  const handleStatusChange = (id: string, status: string) => {
+    setItems(prev => 
+      prev.map(item => 
+      item.id === id
+       ? { ...item, status } as MediaItem
+       : item
+    ));
+  };
+
+  const handleRatingChange = (id: string, rating: number) => {
+    setItems(prev => prev.map(item => 
+      item.id === id ? { ...item, rating } : item
+    ));
+  };
+
+  const handleDeleteItem = (id: string) => {
+    setItems(prev => prev.filter(item => item.id !== id));
+  };
+
+  const filteredItems = items.filter(item =>
+    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  return (
+    <div className="min-h-screen bg-black-50">
+      <main className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+          <h1 className="text-3xl font-bold text-white-900">
+            Entertainment Tracker
+          </h1>
+          <AddMediaDialog onAdd={handleAddItem} />
         </div>
+
+        {/* Search Bar */}
+        <div className="relative mb-8 max-w-xl mx-auto">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black-500 h-5 w-5" />
+          <Input
+            type="text"
+            placeholder="Search your library..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 h-12 text-lg rounded-full border-2 focus:border-blue-500"
+          />
+        </div>
+
+        {/* Media Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredItems.map((item) => (
+            <MediaCard
+              key={item.id}
+              {...item}
+              onStatusChange={(status) => handleStatusChange(item.id, status)}
+              onRatingChange={(rating) => handleRatingChange(item.id, rating)}
+              onDelete={() => handleDeleteItem(item.id)}
+            />
+          ))}
+        </div>
+
+
+        {/* Empty State */}
+        {filteredItems.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-black-500 text-lg">
+              {searchQuery 
+                ? "No items match your search"
+                : "Your library is empty. Add some items to get started!"}
+            </p>
+          </div>
+        )}
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
